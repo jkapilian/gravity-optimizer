@@ -35,7 +35,7 @@ def export_params(r_1, r_2, h, t_wheel, r_rocket, h_rocket, t_rocket):
 	f.write('"D1@Inner_Wheel" = "rocket_diameter"\n\n')
 	f.write('"inner_radial_diff"= .5m\n\n')
 	f.write('"D2@Inner_Wheel" = "rocket_diameter" + 2 * "inner_radial_diff"\n\n')
-	f.write(f'"wheel thickness"= {t_wheel}m\n\n')
+	f.write(f'"wheel thickness"= {h}m\n\n')
 	f.write('"D1@Inner Wheel" = "wheel thickness"\n\n')
 	f.write('"D1@Connection" = "wheel thickness"\n\n')
 	f.write(f'"outer_diameter"= {2*r_1}m\n\n')
