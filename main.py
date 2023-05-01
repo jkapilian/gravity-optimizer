@@ -1,9 +1,51 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter.filedialog import asksaveasfile
 from descent import *
 from thrust import *
 
-materials = ["Kevlar", "Steel", "Custom"]    
+materials = ["Kevlar", "Steel", "Custom"]
+
+def export_params(r_1, r_2, h, t_wheel, r_rocket, h_rocket, t_rocket):
+	# save rocket file
+	f = asksaveasfile(mode="w", defaultextension="txt", initialfile="equations_rocket", title="Save rocket file")
+	if f is None:
+		return
+	f.write(f'"rocket_height"= {h_rocket}m\n\n')
+	f.write(f'"rocket_diameter"= {2*r_rocket}m\n\n')
+	f.write('"D1@Sketch1"="rocket_diameter"/4\n\n')
+	f.write('"D2@Sketch1"="rocket_diameter"/4\n\n')
+	f.write('"D5@Sketch1"="rocket_height"*1.32\n\n')
+	f.write('"D5@Sketch2"="rocket_diameter"/2\n\n')
+	f.write('"D1@Boss-Extrude3"="rocket_diameter"/20\n\n')
+	f.write('"D1@Sketch3"="rocket_height"/6\n\n')
+	f.write('"D2@Sketch3"="rocket_height"/4\n\n')
+	f.write('"D3@Sketch3"="rocket_diameter"*.2\n\n')
+	f.write('"D1@Boss-Extrude4"="rocket_diameter"/20\n\n')
+	f.write('"D1@Sketch2"="rocket_diameter"/4\n\n')
+	f.write('"D2@Sketch2"="rocket_diameter"/10\n\n')
+	f.write('"D3@Sketch2"="rocket_height"*.18\n\n')
+	f.close()
+
+	# save rocket file
+	f = asksaveasfile(mode="w", defaultextension="txt", initialfile="equations_wheel", title="Save wheel file")
+	if f is None:
+		return
+	f.write(f'"rocket_diameter"= {2*r_rocket}m\n\n')
+	f.write('"D1@Inner_Wheel" = "rocket_diameter"\n\n')
+	f.write('"inner_radial_diff"= .5m\n\n')
+	f.write('"D2@Inner_Wheel" = "rocket_diameter" + 2 * "inner_radial_diff"\n\n')
+	f.write(f'"wheel thickness"= {t_wheel}m\n\n')
+	f.write('"D1@Inner Wheel" = "wheel thickness"\n\n')
+	f.write('"D1@Connection" = "wheel thickness"\n\n')
+	f.write(f'"outer_diameter"= {2*r_1}m\n\n')
+	f.write('"D1@Surface-Extrude1"=("outer_diameter"-("rocket_diameter"+"inner_radial_diff"*2))/2\n\n')
+	f.write('"D1@Sketch2"="outer_diameter"\n\n')
+	f.write(f'"outer_radial_diff" = {r_1-r_2}m\n\n')
+	f.write('"D2@Sketch2"="outer_diameter"+("outer_radial_diff"*2)\n\n')
+	f.write('"D1@Boss-Extrude3"="wheel thickness"\n\n')
+
+	f.close()
     
 def density(var, slider):
 	if var.get() == "Custom":
@@ -66,6 +108,8 @@ class Tab1:
 		rotation_label = Label(popup, text = f"Number of rotations needed: {rot/(2*math.pi): .2f}").pack()
 		time_label = Label(popup, text = f"Time to rotate up to speed: {time: .2f}s").pack()
 		prop_mass_label = Label(popup, text = f"Propellant mass: {(mass): .2f}kg").pack()
+
+		button = Button(popup, text="Export to Solidworks", command=lambda: export_params(r_1, r_2, h, t_wheel, r_rocket, h_rocket, t_rocket)).pack()
 
 	def __init__(self, scroll_frame):
 		self.label = Label(scroll_frame, text="Select the following parameters").pack()
@@ -291,6 +335,9 @@ class Tab2:
 		self.time_label.pack()
 		self.prop_mass_label = Label(scroll_frame, text="Propellant mass: ")
 		self.prop_mass_label.pack()	
+
+		self.button = Button(scroll_frame, text="Export to Solidworks", command=lambda: export_params(self.r_1.get(), self.r_2.get(), self.h.get(), self.t_wheel.get(), self.r_rocket.get(), self.h_rocket.get(), self.t_rocket.get()))
+		self.button.pack()
 
 
 def main():
