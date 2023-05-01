@@ -83,7 +83,7 @@ class Tab1:
 		alpha_learn = 10**self.learn.get()
 		
 		obj, r_1, omega, r_2, h = grad_descent(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, alpha_learn)
-		_, _, _, _, _, KE, V = calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, omega, r_2, h)
+		_, _, _, _, _, _, KE, V = calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, omega, r_2, h)
 
 		m = get_mass(r_1, r_2, h, t_rocket, d_rocket)
 
@@ -231,7 +231,7 @@ class Tab2:
 		alpha = 1
 		beta = 10**self.comf.get()
 		
-		obj, _, _, _, _, KE, V = calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, omega, r_2, h)
+		obj, _, _, _, _, _, KE, V = calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, omega, r_2, h)
 
 		m = get_mass(r_1, r_2, h, t_rocket, d_rocket)
 
