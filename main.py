@@ -22,9 +22,6 @@ def export_params(r_1, r_2, h, t_wheel, r_rocket, h_rocket, t_rocket):
 	f.write('"D2@Sketch3"="rocket_height"/4\n\n')
 	f.write('"D3@Sketch3"="rocket_diameter"*.2\n\n')
 	f.write('"D1@Boss-Extrude4"="rocket_diameter"/20\n\n')
-	f.write('"D1@Sketch2"="rocket_diameter"/4\n\n')
-	f.write('"D2@Sketch2"="rocket_diameter"/10\n\n')
-	f.write('"D3@Sketch2"="rocket_height"*.18\n\n')
 	f.close()
 
 	# save rocket file
@@ -145,8 +142,8 @@ class Tab1:
 			
 		self.d_rocket_custom = Scale(self.d_rocket_view, from_ = 500, to=2000, digits = 2, orient="horizontal", label="Rocket Density", length=300)
 
-		self.h_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket height (m)", length=300)
-		self.h_rocket.set(20)
+		self.h_rocket = Scale(scroll_frame, from_ = 10, to=40, orient="horizontal", label="Rocket height (m)", length=300)
+		self.h_rocket.set(32)
 		self.h_rocket.pack()
 		self.r_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket radius (m)", length=300)
 		self.r_rocket.set(5)
@@ -292,8 +289,8 @@ class Tab2:
 			
 		self.d_rocket_custom = Scale(self.d_rocket_view, from_ = 500, to=2000, digits = 2, orient="horizontal", label="Rocket Density", length=300, command=self.calculate)
 
-		self.h_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket height (m)", length=300, command=self.calculate)
-		self.h_rocket.set(20)
+		self.h_rocket = Scale(scroll_frame, from_ = 10, to=40, orient="horizontal", label="Rocket height (m)", length=300, command=self.calculate)
+		self.h_rocket.set(32)
 		self.h_rocket.pack()
 		self.r_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket radius (m)", length=300, command=self.calculate)
 		self.r_rocket.set(5)
