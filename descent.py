@@ -6,8 +6,8 @@ def get_mass(r_1, r_2, h, t_rocket, d_rocket):
   v = sa * t_rocket
   return v * d_rocket
 
-def calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, omega, r_2, h):
-  r_1 = a / (omega**2)
+def calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, r_1, r_2, h):
+  omega = math.sqrt(a/r_1)
 
   KE = 1/2 * math.pi * (r_1**2 - r_2**2 + 2*h*r_1 + 2*h*r_2)*t_wheel * d_wheel * r_1**2 * omega**2 + math.pi * (r_rocket + h_rocket) * t_rocket * d_rocket * r_rocket**3 * omega**2
   V = math.pi * (r_1**2 - r_2**2) * h
@@ -30,7 +30,7 @@ def calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket
   obj_grad_h = alpha * obj_grad_h_KE - beta * obj_grad_h_V
 
 
-  return obj, r_1, obj_grad_omega, obj_grad_r_1, obj_grad_r_2, obj_grad_h, KE, V
+  return obj, omega, obj_grad_omega, obj_grad_r_1, obj_grad_r_2, obj_grad_h, KE, V
 
 
 def grad_descent(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, alpha_grad):
@@ -65,7 +65,7 @@ def grad_descent(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket,
       print("constraint violation - radii too close", r_1, r_2)
       r_2 = r_1 - 2
     
-    new_obj, r_1, obj_grad_omega, obj_grad_r_1, obj_grad_r_2, obj_grad_h, _, _ = calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, omega, r_2, h)
+    new_obj, omega, obj_grad_omega, obj_grad_r_1, obj_grad_r_2, obj_grad_h, _, _ = calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, r_1, r_2, h)
     print(new_obj, omega, r_2, h)
     if obj and abs(obj-new_obj) < epsilon:
       return new_obj, r_1, omega, r_2, h
