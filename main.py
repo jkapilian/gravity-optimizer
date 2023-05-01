@@ -115,8 +115,10 @@ class Tab1:
 		self.label = Label(scroll_frame, text="Select the following parameters").pack()
 
 		self.g = Scale(scroll_frame, from_ = 0.1, to=1.5, digits = 2, resolution = 0.1, orient="horizontal", label="g's", length=300)
+		self.g.set(0.9)
 		self.g.pack()
 		self.C = Scale(scroll_frame, from_ = 1, to=10, digits = 2, orient="horizontal", label="Crew size", length=300)
+		self.C.set(5)
 		self.C.pack()
 		self.t_wheel = Scale(scroll_frame, from_ = 0.1, to=1, digits = 2, resolution = 0.1, orient="horizontal", label="Wheel material thickness (m)", length=300)
 		self.t_wheel.pack()
@@ -144,8 +146,10 @@ class Tab1:
 		self.d_rocket_custom = Scale(self.d_rocket_view, from_ = 500, to=2000, digits = 2, orient="horizontal", label="Rocket Density", length=300)
 
 		self.h_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket height (m)", length=300)
+		self.h_rocket.set(20)
 		self.h_rocket.pack()
 		self.r_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket radius (m)", length=300)
+		self.r_rocket.set(5)
 		self.r_rocket.pack()
 
 		self.opt_label = Label(scroll_frame, text="Optimization parameters").pack()
@@ -166,8 +170,10 @@ class Tab1:
 
 		self.thrust_param_label = Label(scroll_frame, text="Choose thrust parameters").pack()
 		self.i_beam = Scale(scroll_frame, from_ = 10, to=40, orient="horizontal", label="Ion beam current (A)", length=300)
+		self.i_beam.set(20)
 		self.i_beam.pack()
 		self.v_beam = Scale(scroll_frame, from_ = 50, to=200, orient="horizontal", label="Ion beam voltage (V)", length=300)
+		self.v_beam.set(100)
 		self.v_beam.pack()
 
 
@@ -256,8 +262,10 @@ class Tab2:
 		self.label = Label(scroll_frame, text="Select the following parameters").pack()
 
 		self.g = Scale(scroll_frame, from_ = 0.1, to=1.5, digits = 2, resolution = 0.1, orient="horizontal", label="g's", length=300, command=self.g_calc)
+		self.g.set(0.9)
 		self.g.pack()
 		self.C = Scale(scroll_frame, from_ = 1, to=10, digits = 2, orient="horizontal", label="Crew size", length=300, command=self.calculate)
+		self.C.set(5)
 		self.C.pack()
 		self.t_wheel = Scale(scroll_frame, from_ = 0.1, to=1, digits = 2, resolution = 0.1, orient="horizontal", label="Wheel material thickness (m)", length=300, command=self.calculate)
 		self.t_wheel.pack()
@@ -285,8 +293,10 @@ class Tab2:
 		self.d_rocket_custom = Scale(self.d_rocket_view, from_ = 500, to=2000, digits = 2, orient="horizontal", label="Rocket Density", length=300, command=self.calculate)
 
 		self.h_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket height (m)", length=300, command=self.calculate)
+		self.h_rocket.set(20)
 		self.h_rocket.pack()
 		self.r_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket radius (m)", length=300, command=self.calculate)
+		self.r_rocket.set(5)
 		self.r_rocket.pack()
 
 		self.opt_label = Label(scroll_frame, text="Optimization parameters").pack()
@@ -300,18 +310,24 @@ class Tab2:
 
 		self.val_label = Label(scroll_frame, text="Choose wheel parameters").pack()
 		self.r_1 = Scale(scroll_frame, from_ = 10, to=40, orient="horizontal", label="Outer radius (m)", length=300, command=self.r_1_calc)
+		self.r_1.set(32)
 		self.r_1.pack()
 		self.r_2 = Scale(scroll_frame, from_ = 8, to=38, orient="horizontal", label="Inner radius (m)", length=300, command=self.calculate)
+		self.r_2.set(30)
 		self.r_2.pack()
 		self.omega = Scale(scroll_frame, from_ = 1, to=12, orient="horizontal", label="Rotational speed (RPM)", length=300, command=self.omega_calc)
+		self.omega.set(5)
 		self.omega.pack()
 		self.h = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Wheel height (m)", length=300, command=self.calculate)
+		self.h.set(2)
 		self.h.pack()
 
 		self.thrust_param_label = Label(scroll_frame, text="Choose thrust parameters").pack()
 		self.i_beam = Scale(scroll_frame, from_ = 10, to=40, orient="horizontal", label="Ion beam current (A)", length=300, command=self.calculate)
+		self.i_beam.set(20)
 		self.i_beam.pack()
 		self.v_beam = Scale(scroll_frame, from_ = 50, to=200, orient="horizontal", label="Ion beam voltage (V)", length=300, command=self.calculate)
+		self.v_beam.set(100)
 		self.v_beam.pack()
 
 		self.sep = ttk.Separator(scroll_frame, orient="horizontal")
