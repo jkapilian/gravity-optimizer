@@ -5,11 +5,11 @@ m_i = 2.2e-25
 q = 1.6e-19
 c = 3e8
 
-def rotations(KE, I_beam, V_beam):
-    return KE/(I_beam * math.sqrt(2*V_beam * (m_i * c**2)/q))
+def rotations(KE, I_beam, V_beam, r_1):
+    return KE/(I_beam * math.sqrt(2*V_beam * (m_i)/q)*r_1)
 
 def rot_time(d_theta, omega):
-    t = omega/(2*d_theta)
+    t = 2 * d_theta/omega
     return t
 
 def ion_velocity(V_beam):

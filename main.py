@@ -87,7 +87,7 @@ class Tab1:
 
 		m = get_mass(r_1, r_2, h, t_rocket, d_rocket)
 
-		rot = rotations(KE, self.i_beam.get(), self.v_beam.get())
+		rot = rotations(KE, self.i_beam.get(), self.v_beam.get(), r_1)
 		time = rot_time(rot, omega)
 		vel = ion_velocity(self.v_beam.get())
 		mass = prop_mass(m, omega, r_1, vel)
@@ -239,7 +239,7 @@ class Tab2:
 		self.ke_label.config(text = f"Total kinetic energy: {KE: .2f}J")
 		self.v_label.config(text = f"Volume/crew: {(V/C): .2f}m^3")
 
-		rot = rotations(KE, self.i_beam.get(), self.v_beam.get())
+		rot = rotations(KE, self.i_beam.get(), self.v_beam.get(), r_1)
 		time = rot_time(rot, omega)
 		vel = ion_velocity(self.v_beam.get())
 		mass = prop_mass(m, omega, r_1, vel)
