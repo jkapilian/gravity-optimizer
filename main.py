@@ -3,47 +3,7 @@ from tkinter import ttk
 from descent import *
 from thrust import *
 
-materials = ["Kevlar", "Steel", "Custom"]
-
-def optCallback(g, C, t_wheel, t_rocket, d_wheel_variable, d_wheel_custom, d_rocket_variable, d_rocket_custom, h_rocket, r_rocket, comf, learn):
-    a = g.get() * 9.81
-    C = C.get()
-    t_wheel = t_wheel.get()
-    t_rocket = t_rocket.get()
-    
-    if d_wheel_variable.get() == "Kevlar":
-        d_wheel = 1380
-    elif d_wheel_variable.get() == "Steel":
-        d_wheel = 7750
-    else:
-        d_wheel = d_wheel_custom.get()
-    
-    if d_rocket_variable.get() == "Kevlar":
-        d_rocket = 1380
-    elif d_rocket_variable.get() == "Steel":
-        d_rocket = 7750
-    else:
-        d_rocket = d_rocket_custom.get()
-    
-    h_rocket = h_rocket.get()
-    r_rocket = r_rocket.get()
-    
-    alpha = 1
-    beta = 10**comf.get()
-    
-    alpha_learn = 10**learn.get()
-    
-    obj, r_1, omega, r_2, h = grad_descent(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, alpha_learn)
-    
-    popup = Toplevel()
-    popup.title("Optimization Results")
-    obj_label = Label(popup, text=f"Objective Value: {obj: .2f}").pack()
-    r_1_label = Label(popup, text=f"Outer radius: {r_1: .2f} m").pack()
-    r_2_label = Label(popup, text=f"Inner radius: {r_2: .2f} m").pack()
-    omega_label = Label(popup, text=f"Rotational speed: {(omega * 30/math.pi): .2f} RPM").pack()
-    h_label = Label(popup, text=f"Wheel height: {h: .2f} m").pack()
-    popup.config(width=300)
-    
+materials = ["Kevlar", "Steel", "Custom"]    
     
 def density(var, slider):
 	if var.get() == "Custom":
@@ -51,60 +11,124 @@ def density(var, slider):
 	else:
 		slider.pack_forget()
 
-def create_tab1(scroll_frame):
-	label = Label(scroll_frame, text="Select the following parameters").pack()
+class Tab1:
+	def optCallback(self):
+		a = self.g.get() * 9.81
+		C = self.C.get()
+		t_wheel = self.t_wheel.get()
+		t_rocket = self.t_rocket.get()
+		
+		if self.d_wheel_variable.get() == "Kevlar":
+			d_wheel = 1380
+		elif self.d_wheel_variable.get() == "Steel":
+			d_wheel = 7750
+		else:
+			d_wheel = self.d_wheel_custom.get()
+		
+		if self.d_rocket_variable.get() == "Kevlar":
+			d_rocket = 1380
+		elif self.d_rocket_variable.get() == "Steel":
+			d_rocket = 7750
+		else:
+			d_rocket = self.d_rocket_custom.get()
+		
+		h_rocket = self.h_rocket.get()
+		r_rocket = self.r_rocket.get()
+		
+		alpha = 1
+		beta = 10**self.comf.get()
+		
+		alpha_learn = 10**self.learn.get()
+		
+		obj, r_1, omega, r_2, h = grad_descent(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, alpha_learn)
+		_, _, _, _, _, KE, V = calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, omega, r_2, h)
 
-	g = Scale(scroll_frame, from_ = 0.1, to=1.5, digits = 2, resolution = 0.1, orient="horizontal", label="g's", length=300)
-	g.pack()
-	C = Scale(scroll_frame, from_ = 1, to=10, digits = 2, orient="horizontal", label="Crew size", length=300)
-	C.pack()
-	t_wheel = Scale(scroll_frame, from_ = 0.1, to=1, digits = 2, resolution = 0.1, orient="horizontal", label="Wheel material thickness (m)", length=300)
-	t_wheel.pack()
-	t_rocket = Scale(scroll_frame, from_ = 0.1, to=1, digits = 2, resolution = 0.1, orient="horizontal", label="Rocket material thickness (m)", length=300)
-	t_rocket.pack()
+		m = get_mass(r_1, r_2, h, t_rocket, d_rocket)
 
-	d_wheel_view = Frame(scroll_frame)
-	d_wheel_view.pack()
-	d_wheel_variable = StringVar(d_wheel_view)
-	d_wheel_variable.set("Kevlar")
-	d_wheel_label = Label(d_wheel_view, text="Wheel material").pack()
-	d_wheel = OptionMenu(d_wheel_view, d_wheel_variable, *materials, command=lambda e: density(d_wheel_variable, d_wheel_custom))
-	d_wheel.pack()
+		rot = rotations(KE, self.i_beam.get(), self.v_beam.get())
+		time = rot_time(rot, omega)
+		vel = ion_velocity(self.v_beam.get())
+		mass = prop_mass(m, omega, r_1, vel)
+		
+		popup = Toplevel()
+		popup.title("Optimization Results")
+		obj_label = Label(popup, text=f"Objective Value: {obj: .2f}").pack()
+		r_1_label = Label(popup, text=f"Outer radius: {r_1: .2f} m").pack()
+		r_2_label = Label(popup, text=f"Inner radius: {r_2: .2f} m").pack()
+		omega_label = Label(popup, text=f"Rotational speed: {(omega * 30/math.pi): .2f} RPM").pack()
+		h_label = Label(popup, text=f"Wheel height: {h: .2f} m").pack()
+		ke_label = Label(popup, text = f"Total kinetic energy: {KE: .2f}J").pack()
+		v_label = Label(popup, text = f"Volume/crew: {(V/C): .2f}m^3").pack()
 
-	d_wheel_custom = Scale(d_wheel_view, from_ = 500, to=2000, digits = 2, orient="horizontal", label="Wheel Density", length=300)
+		sep = ttk.Separator(popup, orient="horizontal")
+		sep.pack(fill="x")
 
-	d_rocket_view = Frame(scroll_frame)
-	d_rocket_view.pack()
-	d_rocket_variable = StringVar(d_rocket_view)
-	d_rocket_variable.set("Kevlar")
-	d_rocket_label = Label(d_rocket_view, text="Rocket material").pack()
-	d_rocket = OptionMenu(d_rocket_view, d_rocket_variable, *materials, command=lambda e: density(d_rocket_variable, d_rocket_custom))
-	d_rocket.pack()
-        
-	d_rocket_custom = Scale(d_rocket_view, from_ = 500, to=2000, digits = 2, orient="horizontal", label="Rocket Density", length=300)
+		rotation_label = Label(popup, text = f"Number of rotations needed: {rot/(2*math.pi): .2f}").pack()
+		time_label = Label(popup, text = f"Time to rotate up to speed: {time: .2f}s").pack()
+		prop_mass_label = Label(popup, text = f"Propellant mass: {(mass): .2f}kg").pack()
 
-	h_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket height (m)", length=300)
-	h_rocket.pack()
-	r_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket radius (m)", length=300)
-	r_rocket.pack()
+	def __init__(self, scroll_frame):
+		self.label = Label(scroll_frame, text="Select the following parameters").pack()
 
-	opt_label = Label(scroll_frame, text="Optimization parameters").pack()
+		self.g = Scale(scroll_frame, from_ = 0.1, to=1.5, digits = 2, resolution = 0.1, orient="horizontal", label="g's", length=300)
+		self.g.pack()
+		self.C = Scale(scroll_frame, from_ = 1, to=10, digits = 2, orient="horizontal", label="Crew size", length=300)
+		self.C.pack()
+		self.t_wheel = Scale(scroll_frame, from_ = 0.1, to=1, digits = 2, resolution = 0.1, orient="horizontal", label="Wheel material thickness (m)", length=300)
+		self.t_wheel.pack()
+		self.t_rocket = Scale(scroll_frame, from_ = 0.1, to=1, digits = 2, resolution = 0.1, orient="horizontal", label="Rocket material thickness (m)", length=300)
+		self.t_rocket.pack()
 
-	comf_label_1 = Label(scroll_frame, text="Comfortability weight").pack()
-	comf_label = Label(scroll_frame, text="1e0")
-	comf_label.pack()
-	comf = Scale(scroll_frame, from_=-5, to=5, tickinterval=0.1, orient="horizontal", showvalue=0, length=300)
-	comf.config(command=lambda e: comf_label.config(text=f"1e{comf.get()}"))
-	comf.pack()
+		self.d_wheel_view = Frame(scroll_frame)
+		self.d_wheel_view.pack()
+		self.d_wheel_variable = StringVar(self.d_wheel_view)
+		self.d_wheel_variable.set("Kevlar")
+		self.d_wheel_label = Label(self.d_wheel_view, text="Wheel material").pack()
+		self.d_wheel = OptionMenu(self.d_wheel_view, self.d_wheel_variable, *materials, command=lambda e: density(self.d_wheel_variable, self.d_wheel_custom))
+		self.d_wheel.pack()
 
-	learn_label_1 = Label(scroll_frame, text="Learning rate").pack()
-	learn_label = Label(scroll_frame, text="1e0")
-	learn_label.pack()
-	learn = Scale(scroll_frame, from_=-10, to=0, tickinterval=0.1, orient="horizontal", showvalue=0, length=300)
-	learn.config(command=lambda e: learn_label.config(text=f"1e{learn.get()}"))
-	learn.pack()
+		self.d_wheel_custom = Scale(self.d_wheel_view, from_ = 500, to=2000, digits = 2, orient="horizontal", label="Wheel Density", length=300)
 
-	opt = Button(scroll_frame, text="Optimize", command=lambda: optCallback(g, C, t_wheel, t_rocket, d_wheel_variable, d_wheel_custom, d_rocket_variable, d_rocket_custom, h_rocket, r_rocket, comf, learn)).pack()
+		self.d_rocket_view = Frame(scroll_frame)
+		self.d_rocket_view.pack()
+		self.d_rocket_variable = StringVar(self.d_rocket_view)
+		self.d_rocket_variable.set("Kevlar")
+		self.d_rocket_label = Label(self.d_rocket_view, text="Rocket material").pack()
+		self.d_rocket = OptionMenu(self.d_rocket_view, self.d_rocket_variable, *materials, command=lambda e: density(self.d_rocket_variable,self.d_rocket_custom))
+		self.d_rocket.pack()
+			
+		self.d_rocket_custom = Scale(self.d_rocket_view, from_ = 500, to=2000, digits = 2, orient="horizontal", label="Rocket Density", length=300)
+
+		self.h_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket height (m)", length=300)
+		self.h_rocket.pack()
+		self.r_rocket = Scale(scroll_frame, from_ = 1, to=20, orient="horizontal", label="Rocket radius (m)", length=300)
+		self.r_rocket.pack()
+
+		self.opt_label = Label(scroll_frame, text="Optimization parameters").pack()
+
+		self.comf_label_1 = Label(scroll_frame, text="Comfortability weight").pack()
+		self.comf_label = Label(scroll_frame, text="1e0")
+		self.comf_label.pack()
+		self.comf = Scale(scroll_frame, from_=-5, to=5, tickinterval=0.1, orient="horizontal", showvalue=0, length=300)
+		self.comf.config(command=lambda e: self.comf_label.config(text=f"1e{self.comf.get()}"))
+		self.comf.pack()
+
+		self.learn_label_1 = Label(scroll_frame, text="Learning rate").pack()
+		self.learn_label = Label(scroll_frame, text="1e0")
+		self.learn_label.pack()
+		self.learn = Scale(scroll_frame, from_=-10, to=0, tickinterval=0.1, orient="horizontal", showvalue=0, length=300)
+		self.learn.config(command=lambda e: self.learn_label.config(text=f"1e{self.learn.get()}"))
+		self.learn.pack()
+
+		self.thrust_param_label = Label(scroll_frame, text="Choose thrust parameters").pack()
+		self.i_beam = Scale(scroll_frame, from_ = 10, to=40, orient="horizontal", label="Ion beam current (A)", length=300)
+		self.i_beam.pack()
+		self.v_beam = Scale(scroll_frame, from_ = 50, to=200, orient="horizontal", label="Ion beam voltage (V)", length=300)
+		self.v_beam.pack()
+
+
+		self.opt = Button(scroll_frame, text="Optimize", command=self.optCallback).pack()
+
 
 class Tab2:
 	def density(self, var, slider):
@@ -304,7 +328,7 @@ def main():
 
 	canvas1.configure(yscrollcommand=scroll.set)
 
-	create_tab1(scroll_frame)
+	tab1_obj = Tab1(scroll_frame)
     
 	# --- MANUAL TAB ---
 	canvas2 = Canvas(tab2, height="80000")
