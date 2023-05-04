@@ -12,6 +12,7 @@ To run the optimizer, you must have Python installed on the machine you are runn
 2. Change parameters as needed by modifying the corresponding sliders.
 ![Figure 1 - main GUI](Fig1.png)
 3. Click 'Optimize' at the bottom of the window to begin running the optimizer. The optimized parameters will be displayed after the optimization completes.
+
 ![Figure 2 - optimized window](Fig2.png)
 
 	a. NOTE: If the program hangs due to parameters that will not converge, press `CTRL+C` in your terminal window.
