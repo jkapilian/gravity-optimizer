@@ -34,29 +34,29 @@ def calculate_obj(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket
 
 
 def grad_descent(a, C, t_wheel, t_rocket, d_wheel, d_rocket, h_rocket, r_rocket, alpha, beta, alpha_grad):
-  epsilon = 1
+  epsilon = 10
 
   # initial guesses
   omega = 0.562
   r_1 = 32
   r_2 = 30
-  h = 2
+  h = 68 * C/(math.pi * (r_1**2 - r_2**2))
 
   obj = None
   while True:
     if omega > 0.733:
       print("constraint violation - omega too large", omega)
       omega = 0.733
-    if r_1 < 22:
+    if r_1 < 12.2:
       print("constraint violation - outer radius too small", r_1)
-      r_1 = 22
+      r_1 = 12.2
 
     if omega < 0.1:
       print("constraint violation - omega too small", omega)
       omega = 0.1
-    if r_2 < 20:
+    if r_2 < r_rocket:
       print("constraint violation - r_2 too small", r_2)
-      r_2 = 20
+      r_2 = r_rocket
     if h < 2:
       print("constraint violation - h too small", h)
       h = 2

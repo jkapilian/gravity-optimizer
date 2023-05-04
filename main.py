@@ -152,17 +152,19 @@ class Tab1:
 		self.opt_label = Label(scroll_frame, text="Optimization parameters").pack()
 
 		self.comf_label_1 = Label(scroll_frame, text="Comfortability weight").pack()
-		self.comf_label = Label(scroll_frame, text="1e0")
+		self.comf_label = Label(scroll_frame, text="1e4.0")
 		self.comf_label.pack()
-		self.comf = Scale(scroll_frame, from_=-5, to=5, tickinterval=0.1, orient="horizontal", showvalue=0, length=300)
+		self.comf = Scale(scroll_frame, from_=3.5, to=4.1, digits = 4, resolution = 0.001, orient="horizontal", showvalue=0, length=300)
 		self.comf.config(command=lambda e: self.comf_label.config(text=f"1e{self.comf.get()}"))
+		self.comf.set(4.0)
 		self.comf.pack()
 
 		self.learn_label_1 = Label(scroll_frame, text="Learning rate").pack()
-		self.learn_label = Label(scroll_frame, text="1e0")
+		self.learn_label = Label(scroll_frame, text="1e-10")
 		self.learn_label.pack()
-		self.learn = Scale(scroll_frame, from_=-10, to=0, tickinterval=0.1, orient="horizontal", showvalue=0, length=300)
+		self.learn = Scale(scroll_frame, from_=-11, to=-9, digits = 3, resolution = 0.01, orient="horizontal", showvalue=0, length=300)
 		self.learn.config(command=lambda e: self.learn_label.config(text=f"1e{self.learn.get()}"))
+		self.learn.set(-10)
 		self.learn.pack()
 
 		self.thrust_param_label = Label(scroll_frame, text="Choose thrust parameters").pack()
@@ -299,10 +301,11 @@ class Tab2:
 		self.opt_label = Label(scroll_frame, text="Optimization parameters").pack()
 
 		self.comf_label_1 = Label(scroll_frame, text="Comfortability weight").pack()
-		self.comf_label = Label(scroll_frame, text="1e0")
+		self.comf_label = Label(scroll_frame, text="1e4.0")
 		self.comf_label.pack()
-		self.comf = Scale(scroll_frame, from_=-5, to=5, tickinterval=0.1, orient="horizontal", showvalue=0, length=300)
+		self.comf = Scale(scroll_frame, from_=3.5, to=4.1, digits = 4, resolution = 0.001, orient="horizontal", showvalue=0, length=300)
 		self.comf.config(command=self.set_comf_label)
+		self.comf.set(4.0)
 		self.comf.pack()
 
 		self.val_label = Label(scroll_frame, text="Choose wheel parameters").pack()
