@@ -14,7 +14,7 @@ To run the optimizer, you must have Python installed on the machine you are runn
 3. Click 'Optimize' at the bottom of the window to begin running the optimizer. The optimized parameters will be displayed after the optimization completes.
 ![Figure 2 - optimized window](Fig2.png)
 
-  a. NOTE: If the program hangs due to parameters that will not converge, press `CTRL+C` in your terminal window.
+	a. NOTE: If the program hangs due to parameters that will not converge, press `CTRL+C` in your terminal window.
 4. To view optimized design as model, select 'Export to Solidworks' and navigate to the directory of your Solidworks model to save the dimension files for the rocket and wheel. Open the 3D model in Solidworks to view with these dimensions.
 
 ### Manual Mode
