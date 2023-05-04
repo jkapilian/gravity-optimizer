@@ -28,5 +28,5 @@ To run the optimizer, you must have Python installed on the machine you are runn
 
 ## Notes on Optimization Parameters
 * As the magnitude of the kinetic energy term is much larger than that of volume per crew member, moving the beta hyperparameter between 10^3.5 and 10^4.1 with a learning rate between 10^-11 and 10^-9 best characterizes the tradeoff between crew comfortability and energy usage.
-* Alpha is always set to 1 as any other changes could simply be represented as a scalar multiple of the objective with Alpha=1 with a larger objective value while still converging to the same parameter values
+* Alpha is always set to 1 as any other changes could simply be represented as a scalar multiple of the objective with Alpha=1 with a larger objective value while still converging to the same parameter values.
 * As expected, for lower Beta values (i.e. favoring energy reduction), the program converges to the minimal constraint values.
